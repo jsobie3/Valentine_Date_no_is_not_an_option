@@ -36,6 +36,41 @@
       100% { background-position: 0% 50%; }
     }
 
+    /* Quote Panel */
+    .quote-panel {
+      position: fixed;
+      left: 32px;
+      top: 50%;
+      transform: translateY(-50%) scale(0.95);
+      width: 260px;
+      padding: 22px;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(14px);
+      border-radius: 22px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+      font-size: 15px;
+      color: #4a1c2f;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .quote-panel.show {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+    }
+
+    .quote-title {
+      font-family: "Playfair Display", serif;
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+
+    .quote-text {
+      font-style: italic;
+      line-height: 1.5;
+    }
+
     /* Card */
     .card {
       width: min(92%, 420px);
@@ -56,7 +91,6 @@
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    /* Glow ring */
     .card::before {
       content: "";
       position: absolute;
@@ -135,13 +169,12 @@
       font-style: italic;
     }
 
-    /* Floating depth hearts */
+    /* Floating hearts */
     .heart {
       position: absolute;
       bottom: -20px;
       animation: floatUp linear forwards;
       pointer-events: none;
-      filter: blur(0.3px);
     }
 
     @keyframes floatUp {
@@ -155,18 +188,20 @@
       }
     }
 
-    /* Responsive */
-    @media (max-width: 480px) {
-      h2 { font-size: 23px; }
-      .emoji { font-size: 58px; }
-      button { padding: 12px 28px; font-size: 15px; }
-      #yes { left: 8%; }
-      #no { left: 55%; }
+    @media (max-width: 768px) {
+      .quote-panel {
+        display: none;
+      }
     }
   </style>
 </head>
 
 <body>
+
+  <div class="quote-panel">
+    <div class="quote-title">Things you should consider 💭</div>
+    <div class="quote-text"></div>
+  </div>
 
   <div class="card">
     <div class="emoji">🐱❤️</div>
@@ -191,9 +226,27 @@
     const hoverSound = document.getElementById("hoverSound");
     const yesSound = document.getElementById("yesSound");
 
+    const quotePanel = document.querySelector(".quote-panel");
+    const quoteText = document.querySelector(".quote-text");
+
+    const quotes = [
+      { "text": "Are you absolutely sure?" },
+      { "text": "Think about the cuddles." },
+      { "text": "This button wouldn’t run if it wasn’t meant to be." },
+      { "text": "Statistically speaking, yes is the correct answer." },
+      { "text": "This could be your best decision today." },
+       { "text": "Think about Sparrow." }, { "text": "You're making Bandit sad :(." }
+    ];
+
+    let quoteIndex = 0;
+
     noBtn.addEventListener("mouseenter", () => {
       hoverSound.currentTime = 0;
       hoverSound.play();
+
+      quotePanel.classList.add("show");
+      quoteText.textContent = quotes[quoteIndex].text;
+      quoteIndex = (quoteIndex + 1) % quotes.length;
 
       const cardRect = card.getBoundingClientRect();
       const btnRect = noBtn.getBoundingClientRect();
@@ -215,7 +268,7 @@
       });
 
       setTimeout(() => {
-        alert("YAY 💕 I can’t wait for Valentine’s Day with you!");
+        alert("YAY 💕 We're ordering Dominos!!!");
       }, 500);
     });
 
@@ -237,4 +290,3 @@
 
 </body>
 </html>
-
